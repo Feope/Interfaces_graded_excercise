@@ -1,0 +1,336 @@
+openapi: 3.0.0
+info:
+  title: application
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /user:
+    post:
+      summary: Post Endpoint
+      operationId: post-user
+      responses:
+        '200':
+          description: User created
+        '406':
+          description: Not Acceptable information given
+      description: Create a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+  /posting:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  PostingInformation:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostingData'
+              examples:
+                example-1:
+                  value:
+                    PostingInformation:
+                      - id: 123b3123gr
+                        title: Kitchen Table
+                        category: Furniture
+                        location: 'Detroit, USA'
+                        images: string
+                        price: 30
+                        date: 29.01.2021
+                        delivery: Pickup
+                        contact information: 'Ben Dover, mobile:+358 184534344'
+      operationId: get-posting
+      description: Get postings
+    post:
+      summary: Post Endpoint
+      operationId: post-posting
+      responses:
+        '200':
+          description: Posting created
+        '403':
+          description: Must be logged in
+        '406':
+          description: Not Acceptable Information given
+      description: Create a new item posting
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                PostingInformation:
+                  $ref: '#/components/schemas/PostingData'
+              required:
+                - PostingInformation
+  '/posting/{id}':
+    parameters:
+      - schema:
+          type: string
+          example: 213fsegesf
+        name: id
+        in: path
+        required: true
+        description: posting id
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  PostingInformation:
+                    $ref: '#/components/schemas/PostingData'
+              examples:
+                example-1:
+                  value:
+                    PostingInformation:
+                      id: 123b3123gr
+                      title: Kitchen Table
+                      category: Furniture
+                      location: 'Detroit, USA'
+                      images: string
+                      price: 30
+                      date: 29.01.2021
+                      delivery: Pickup
+                      contact information: 'Ben Dover, mobile:+358 184534344'
+        '404':
+          description: No posting with given id found
+      operationId: get-posting-id
+      description: Get a specific posting
+    put:
+      summary: Put Endpoint
+      operationId: put-posting-id
+      responses:
+        '200':
+          description: Posting updated
+        '400':
+          description: User does not exist
+        '401':
+          description: User is not authorized to edit this posting
+        '406':
+          description: Not Acceptable Posting Information given
+      description: Update specific posting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                UserIdentification:
+                  $ref: '#/components/schemas/User'
+                UpdatedPostingInformation:
+                  $ref: '#/components/schemas/PostingData'
+              required:
+                - UserIdentification
+                - UpdatedPostingInformation
+            examples:
+              example-1:
+                value:
+                  UserIdentification:
+                    Username: DoorBell
+                    Password: 123abc
+                  UpdatedPostingInformation:
+                    id: 123b3123gr
+                    title: Kitchen Table
+                    category: Furniture
+                    location: 'Detroit, USA'
+                    images: string
+                    price: 30
+                    date: 29.01.2021
+                    delivery: Pickup
+                    contact information: 'Ben Dover, mobile:+358 184534344'
+    delete:
+      summary: Delete Endpoint
+      operationId: delete-posting-id
+      responses:
+        '200':
+          description: Posting deleted
+        '400':
+          description: User does not exist
+        '401':
+          description: User not allowed to delete this posting
+      description: delete specific posting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                UserIdentification:
+                  $ref: '#/components/schemas/User'
+              required:
+                - UserIdentification
+  '/posting/category/{param}':
+    parameters:
+      - schema:
+          type: string
+          example: Electronics
+        name: param
+        in: path
+        required: true
+        description: A category of products
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  PostingInformation:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostingData'
+                required:
+                  - PostingInformation
+        '404':
+          description: No category with that name
+      operationId: get-posting-category-param
+      description: get a category of products
+  '/posting/location/{param}':
+    parameters:
+      - schema:
+          type: string
+          example: Helsinki
+        name: param
+        in: path
+        required: true
+        description: location name
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  PostingInformation:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostingData'
+                required:
+                  - PostingInformation
+        '404':
+          description: No given location found
+      operationId: get-posting-location-param
+      description: Get products from that location
+  '/posting/date/{param}':
+    parameters:
+      - schema:
+          type: string
+          example: '03.2019'
+        name: param
+        in: path
+        required: true
+        description: Date by Month and year
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  PostingInformation:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostingData'
+                required:
+                  - PostingInformation
+        '400':
+          description: Given date is not valid
+      operationId: get-posting-date-param
+      description: Get postings from a certain month in a certain year
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        Username:
+          type: string
+          description: Unique username
+          example: DoorBell
+        Password:
+          type: string
+          description: User password
+          minLength: 1
+          example: 123abc
+      required:
+        - Username
+        - Password
+    PostingData:
+      title: PostingData
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 123b3123gr
+        title:
+          type: string
+          description: Name for the posting
+          example: Kitchen Table
+        category:
+          type: string
+          description: Category of the item
+          example: Furniture
+        location:
+          type: string
+          description: Location of the item
+          example: 'Detroit, USA'
+        images:
+          type: string
+          description: Images of item
+          format: binary
+        price:
+          type: number
+          description: price of item
+          example: 30
+          format: double
+        date:
+          type: string
+          description: date of posting
+          example: 29.01.2021
+        delivery:
+          type: string
+          description: type of delivery
+          example: Pickup
+        contact information:
+          type: string
+          description: name and contact information of seller
+          example: 'Ben Dover, mobile:+358 184534344'
+      required:
+        - id
+        - title
+        - category
+        - location
+        - images
+        - price
+        - date
+        - delivery
+        - contact information
+  securitySchemes: {}
