@@ -14,12 +14,19 @@ paths:
           description: User created
         '406':
           description: Not Acceptable information given
+        '410':
+          description: Username already taken
       description: Create a new user
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
+            examples:
+              example-1:
+                value:
+                  Username: DoorBell
+                  Password: 123abc
   /posting:
     get:
       summary: Your GET endpoint
@@ -44,11 +51,11 @@ paths:
                         title: Kitchen Table
                         category: Furniture
                         location: 'Detroit, USA'
-                        images: string
+                        image: string
                         price: 30
                         date: 29.01.2021
                         delivery: Pickup
-                        contact information: 'Ben Dover, mobile:+358 184534344'
+                        contact_information: 'Ben Dover, mobile:+358 184534344'
       operationId: get-posting
       description: Get postings
     post:
@@ -72,6 +79,22 @@ paths:
                   $ref: '#/components/schemas/PostingData'
               required:
                 - PostingInformation
+            examples:
+              example-1:
+                value:
+                  PostingInformation:
+                    id: 123b3123gr
+                    title: Kitchen Table
+                    category: Furniture
+                    location: 'Detroit, USA'
+                    image: string
+                    price: 30
+                    date: 29.01.2021
+                    delivery: Pickup
+                    contact_information: 'Ben Dover, mobile:+358 184534344'
+                    image2: string
+                    image3: string
+                    image4: string
   '/posting/{id}':
     parameters:
       - schema:
@@ -102,11 +125,11 @@ paths:
                       title: Kitchen Table
                       category: Furniture
                       location: 'Detroit, USA'
-                      images: string
+                      image: string
                       price: 30
                       date: 29.01.2021
                       delivery: Pickup
-                      contact information: 'Ben Dover, mobile:+358 184534344'
+                      contact_information: 'Ben Dover, mobile:+358 184534344'
         '404':
           description: No posting with given id found
       operationId: get-posting-id
@@ -148,11 +171,11 @@ paths:
                     title: Kitchen Table
                     category: Furniture
                     location: 'Detroit, USA'
-                    images: string
+                    image: string
                     price: 30
                     date: 29.01.2021
                     delivery: Pickup
-                    contact information: 'Ben Dover, mobile:+358 184534344'
+                    contact_information: 'Ben Dover, mobile:+358 184534344'
     delete:
       summary: Delete Endpoint
       operationId: delete-posting-id
@@ -302,9 +325,9 @@ components:
           type: string
           description: Location of the item
           example: 'Detroit, USA'
-        images:
+        image:
           type: string
-          description: Images of item
+          description: Image of item
           format: binary
         price:
           type: number
@@ -319,18 +342,27 @@ components:
           type: string
           description: type of delivery
           example: Pickup
-        contact information:
+        contact_information:
           type: string
           description: name and contact information of seller
           example: 'Ben Dover, mobile:+358 184534344'
+        image2:
+          type: string
+          format: binary
+        image3:
+          type: string
+          format: binary
+        image4:
+          type: string
+          format: binary
       required:
         - id
         - title
         - category
         - location
-        - images
+        - image
         - price
         - date
         - delivery
-        - contact information
+        - contact_information
   securitySchemes: {}
