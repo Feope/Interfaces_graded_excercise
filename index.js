@@ -7,7 +7,20 @@ const port = 3000
 app.use(bodyParser.json())
 
 var credentials = [{ Username: 'Test', Password: '12314' }]
-var postings = []
+var postings = [{
+    id: "123b3123gr",
+    title: "Kitchen Table",
+    category: "Furniture",
+    location: "Detroit, USA",
+    image: "string",
+    price: 30,
+    date: "29.01.2021",
+    delivery: "Pickup",
+    contact_information: "Ben Dover, mobile:+358 184534344",
+    image2: "string",
+    image3: "string",
+    image4: "string"
+  }]
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -19,7 +32,11 @@ app.get('/posting', (req, res) => {
 })
 
 app.post('/posting', (req,res) => {
-    if(req.body.PostingInformation.hasOwnProperty('id') == false){
+    if(req.body.hasOwnProperty('PostingInformation') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('id') == false){
         res.status(406)
         res.send("Not Acceptable Information given")
     }
@@ -62,27 +79,139 @@ app.post('/posting', (req,res) => {
 })
 
 app.get('/posting/:id', (req, res) => {
-    res.send('Get posting with id ' + req.params.id)
+    var reArray = []
+    for(element of postings){
+        if(element.id == req.params.id){
+            reArray.push(element);
+        }
+    }
+    if(reArray === undefined || reArray.length == 0){
+        res.status(404).send("No posting with given id found")
+    }
+    else{
+        res.send(reArray)
+    }
 })
 
 app.put('/posting/:id', (req, res) => {
-    res.send('Update posting with id ' + req.params.id)
+    var reArray = [];
+
+    if(req.body.PostingInformation.hasOwnProperty('id') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('title') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('category') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('location') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('image') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('price') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('date') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('delivery') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else if(req.body.PostingInformation.hasOwnProperty('contact_information') == false){
+        res.status(406)
+        res.send("Not Acceptable Information given")
+    }
+    else{
+        for(element of postings){
+            if(element.id == req.params.id){
+                element.title = req.body.PostingInformation.title;
+                element.category = req.body.PostingInformation.category;
+                element.location = req.body.PostingInformation.location;
+                element.image = req.body.PostingInformation.image;
+                element.price = req.body.PostingInformation.price;
+                element.date = req.body.PostingInformation.date;
+                element.delivery = req.body.PostingInformation.delivery;
+                element.contact_information = req.body.PostingInformation.contact_information;
+                reArray.push(element);
+                res.send('Update posting with id ' + req.params.id + JSON.stringify(reArray))
+            }
+        }
+    }
+    
 })
 
 app.delete('/posting/:id', (req, res) => {
-    res.send('delete posting with id ' + req.params.id)
+    var deleted = false;
+    for(var i = postings.length -1;
+        i >= 0;
+        i--){
+        if(postings[i].id == req.params.id){
+            postings.splice(i,1)
+            deleted = true;
+        }
+    }
+    if(deleted == false){
+        res.status(400).send('Posting does not exist')
+    }
+    else{
+        res.send('Posting deleted')
+    }
 })
 
 app.get('/posting/category/:id', (req, res) => {
-    res.send('Get postings category with category ' + req.params.id)
+    var reArray = []
+    for(element of postings){
+        if(element.category == req.params.id){
+            reArray.push(element);
+        }
+    }
+    if(reArray === undefined || reArray.length == 0){
+        res.status(404).send("No posting with given category found")
+    }
+    else{
+        res.send(reArray)
+    }
 })
 
 app.get('/posting/location/:id', (req, res) => {
-    res.send('Get postings location with location ' + req.params.id)
+    var reArray = []
+    for(element of postings){
+        if(element.location == req.params.id){
+            reArray.push(element);
+        }
+    }
+    if(reArray === undefined || reArray.length == 0){
+        res.status(404).send("No posting with given location found")
+    }
+    else{
+        res.send(reArray)
+    }
 })
 
 app.get('/posting/date/:id', (req, res) => {
-    res.send('Get postings date with date ' + req.params.id)
+    var reArray = []
+    for(element of postings){
+        if(element.date == req.params.id){
+            reArray.push(element);
+        }
+    }
+    if(reArray === undefined || reArray.length == 0){
+        res.status(404).send("No posting with given date found")
+    }
+    else{
+        res.send(reArray)
+    }
 })
 
 app.post('/user', (req,res) => {
@@ -114,6 +243,29 @@ app.post('/user', (req,res) => {
     else{
         res.status(406);
         res.send("Missing Username")
+    }
+})
+
+app.put('/login', (req,res) =>{
+    if(req.body.hasOwnProperty('Username') == false){
+        res.status(406)
+        res.send("Not Acceptable Credentials")
+    }
+    else if(req.body.hasOwnProperty('Password') == false){
+        res.status(406)
+        res.send("Not Acceptable Credentials")
+    }
+    else{
+        var user = credentials.find(element => element.Username == req.body.Username);
+        if(user === undefined || user.length == 0){
+            res.status(401).send('Wrong Information')
+        }
+        else if(user.Password == req.body.Password){
+            res.status(200).send('logged in')
+        }
+        else{
+            res.status(401).send('Wrong Information')
+        }
     }
 })
 
