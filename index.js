@@ -11,7 +11,7 @@ var postings = [{
     id: "123b3123gr",
     title: "Kitchen Table",
     category: "Furniture",
-    location: "Detroit, USA",
+    location: "Detroit",
     image: "string",
     price: 30,
     date: "29.01.2021",
@@ -147,8 +147,7 @@ app.put('/posting/:id', (req, res) => {
                 res.send('Update posting with id ' + req.params.id + JSON.stringify(reArray))
             }
         }
-    }
-    
+    } 
 })
 
 app.delete('/posting/:id', (req, res) => {
