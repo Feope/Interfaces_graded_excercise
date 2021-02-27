@@ -270,6 +270,6 @@ app.put('/login', (req,res) =>{
     }
 })
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+app.listen(app.get('port'), function() {
+    console.log('Node app is running on port', app.get('port'));
+});
