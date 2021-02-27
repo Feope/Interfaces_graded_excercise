@@ -1,9 +1,10 @@
-
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const app = express()
 const port = 3000
 
+app.use(cors())
 app.use(bodyParser.json())
 
 app.set('port', (process.env.PORT || 80));
@@ -273,3 +274,4 @@ app.put('/login', (req,res) =>{
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));
 });
+
