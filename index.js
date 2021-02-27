@@ -6,6 +6,8 @@ const port = 3000
 
 app.use(bodyParser.json())
 
+app.set('port', (process.env.PORT || 80));
+
 var credentials = [{ Username: 'Test', Password: '12314' }]
 var postings = [{
     id: "123b3123gr",
